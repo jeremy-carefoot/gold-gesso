@@ -2,6 +2,7 @@
 
 This application interacts with the UofA Planner API to track assignments and provide a more personalized school planner experience.
 
+The application uses Nuxt, Vue, and Typescript.
 Check the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) for more information on the technologies used.
 
 ## Setup

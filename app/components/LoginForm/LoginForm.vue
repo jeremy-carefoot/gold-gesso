@@ -4,7 +4,15 @@
             <h2 class="text-xl font-semibold text-center">
                 Sign In
             </h2>
-        </template> 
+        </template>
+        <UAlert
+            v-if="error"
+            color="error"
+            variant="subtle"
+            icon="material-symbols:warning-outline-rounded"
+            :title="error"
+            class="mb-4"
+        />
         <UForm
             :state="formState"
             @submit="onSubmit"
@@ -70,6 +78,12 @@
 </template>
 
 <script setup lang="ts">
+interface Props {
+    error?: string | null;
+}
+
+defineProps<Props>();
+
 const formState = ref({
     username: '',
     password: ''

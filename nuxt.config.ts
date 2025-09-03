@@ -13,6 +13,9 @@ export default defineNuxtConfig({
   ui: {
     colorMode: false 
   },
+  icon: {
+    localApiEndpoint: '/icon-service/icons',
+  },
   modules: [
     '@nuxt/ui'
   ],

@@ -1,11 +1,9 @@
 export default defineNuxtPlugin((nuxtApp) => {
     const config = useRuntimeConfig();
-    const baseURL = config.public.apiBase as string | undefined;
+    const baseURLConf = config.public.apiBase as string | undefined;
+    const isDev = import.meta.dev;
 
-    if (!baseURL) {
-        console.error('Error: Base API url not provided');
-        return {};
-    }
+    const baseURL = (isDev || !baseURLConf) ? '' : baseURLConf;
 
     const api = $fetch.create({
         baseURL,

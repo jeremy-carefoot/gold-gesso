@@ -1,1 +1,16 @@
 @import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+    --color-main-50: #f2fbf4;
+    --color-main-100: #e2f6e8;
+    --color-main-200: #c6ecd1;
+    --color-main-300: #99dcad;
+    --color-main-400: #65c381;
+    --color-main-500: #40a75f;
+    --color-main-600: #30894b;
+    --color-main-700: #286d3e;
+    --color-main-800: #275d38;
+    --color-main-900: #1f482c;
+    --color-main-950: #0c2715;
+}

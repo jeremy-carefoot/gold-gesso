@@ -10,6 +10,9 @@ export default defineNuxtConfig({
       apiBase: ''
     }
   },
+  ui: {
+    colorMode: false 
+  },
   modules: [
     '@nuxt/ui'
   ],
@@ -17,5 +20,13 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss()
     ]
+  },
+  nitro: {
+    devProxy: {
+      '/api': {
+        target: process.env.NUXT_PUBLIC_API_BASE,
+        changeOrigin: true
+      }
+    }
   }
 })

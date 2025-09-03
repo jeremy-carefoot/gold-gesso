@@ -1,0 +1,7 @@
+{
+  "tailwindCSS.experimental.configFile": "app/assets/css/main.css",
+  "css.lint.unknownAtRules": "ignore",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}

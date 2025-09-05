@@ -6,14 +6,23 @@ export default defineNuxtPlugin((nuxtApp) => {
     const baseURL = (isDev || !baseURLConf) ? '' : baseURLConf;
 
     const csrfToken = useCookie('csrftoken');
+    const { token: authToken } = useAuth();
 
     const api = $fetch.create({
         baseURL,
-        headers: {
-            'X-CSRFToken': csrfToken.value ?? ''
-        },
-        onRequest({ request, options, error }) {
-            // Add any custom on request events here
+        async onRequest({ options }) {
+            const authHeaders: Record<string, string> = {};
+
+            if (authToken.value) {
+                authHeaders['Authorization'] = authToken.value;
+            } if (csrfToken.value) {
+                authHeaders['X-CSRFToken'] = csrfToken.value;
+            }
+
+            options.headers = {
+                ...options.headers,
+                ...authHeaders
+            }
         },
         onResponse({ response }) {
             // Add any custom on response events here (could be debugging)

@@ -1,5 +1,5 @@
 const AuthConfig = {
-    disableServerSideAuth: true,
+    disableServerSideAuth: false,
     baseURL: process.env.NUXT_PUBLIC_API_BASE,
     provider: {
       type: 'local',
@@ -14,16 +14,21 @@ const AuthConfig = {
       },
       token: {
         signInResponseTokenPointer: '/access',
-        maxAgeInSeconds: 3600
+        maxAgeInSeconds: 3600,
+        // TODO secureCookieOnly in production
+        httpOnlyCookieAttribute: false
       },
       refresh: {
         isEnabled: true,
         endpoint: { path: '/auth/token/refresh/', method: 'post' },
+        refreshOnlyToken: false,
         token: {
           signInResponseRefreshTokenPointer: '/refresh',
           refreshResponseTokenPointer: '/refresh',
           refreshRequestTokenPointer: '/refresh',
-          maxAgeInSeconds: 604800
+          maxAgeInSeconds: 604800,
+          // TODO secureCookieOnly in production
+          httpOnlyCookieAttribute: false
         }
       },
       session: {

@@ -27,6 +27,7 @@ const onRegister = async (userInfo: UserRegisterInfo) => {
         userInfo,
         { callbackUrl: '/' }
     ).catch(async error => {
+        // On bad request, handle form field errors
         if (error instanceof FetchError
             && error.status === 400
         ) {

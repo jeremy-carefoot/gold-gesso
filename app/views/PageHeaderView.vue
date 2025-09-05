@@ -4,19 +4,21 @@
             :src="GoldGessoLogo"
             class="logo"
         />
-        <AccountDropdown
-            v-if="status === 'authenticated'"
-            @sign-out="onSignOut"
-        />
-        <NuxtLink
-            v-else
-            to="/login"
-        >
-            <UButton
-                label="Login"
-                class="h-fit"
+        <ClientOnly>
+            <AccountDropdown
+                v-if="status === 'authenticated'"
+                @sign-out="onSignOut"
             />
-        </NuxtLink>
+            <NuxtLink
+                v-else-if="status === 'unauthenticated'"
+                to="/login"
+            >
+                <UButton
+                    label="Login"
+                    class="h-fit"
+                />
+            </NuxtLink>
+        </ClientOnly>
     </div>
 </template>
 

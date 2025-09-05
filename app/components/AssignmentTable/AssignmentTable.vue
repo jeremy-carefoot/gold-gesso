@@ -31,10 +31,6 @@ const columns: TableColumn<AssignmentMeta>[] = [
         header: 'Name'
     },
     {
-        accessorKey: 'description',
-        header: 'Description'
-    },
-    {
         accessorKey: 'due_at',
         header: 'Due At'
     },

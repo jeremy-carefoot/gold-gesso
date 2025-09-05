@@ -1,15 +1,8 @@
 export default defineNuxtPlugin((nuxtApp) => {
-    const isDev = import.meta.dev;
-    const config = useRuntimeConfig();
-
-    const baseURLConf = config.public.apiBase as string | undefined;
-    const baseURL = (isDev || !baseURLConf) ? '' : baseURLConf;
-
     const csrfToken = useCookie('csrftoken');
     const { token: authToken } = useAuth();
 
     const api = $fetch.create({
-        baseURL,
         async onRequest({ options }) {
             const authHeaders: Record<string, string> = {};
 

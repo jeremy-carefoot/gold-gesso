@@ -11,9 +11,7 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth'
   ],
   runtimeConfig: {
-    public: {
-      apiBase: ''
-    }
+    apiBase: ''
   },
   ui: {
     colorMode: false // disables dark mode
@@ -25,14 +23,6 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss()
     ]
-  },
-  nitro: {
-    devProxy: {
-      '/api': {
-        target: process.env.NUXT_PUBLIC_API_BASE,
-        changeOrigin: true
-      }
-    }
   },
   auth: AuthConfig
 });

@@ -57,12 +57,6 @@
         
         <template #footer>
             <div class="flex items-center justify-between text-sm">
-                <ULink 
-                    to="/forgot-password" 
-                    class="text-primary hover:underline"
-                >
-                    Forgot password?
-                </ULink>
                 <div class="flex items-center gap-1">
                     <span class="text-gray-600">New user?</span>
                     <ULink 
@@ -78,11 +72,9 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
+defineProps<{
     error?: string | null;
-}
-
-defineProps<Props>();
+}>();
 
 const formState = ref({
     username: '',

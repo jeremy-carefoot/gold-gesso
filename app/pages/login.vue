@@ -8,22 +8,29 @@
 </template>
 
 <script setup lang="ts">
+import { watchImmediate } from '@vueuse/core';
 import { LoginErrorMap } from '~/constants/errorMaps';
 
-const { signIn } = useAuth();
+const { signIn, status } = useAuth();
 
 const loginError = ref<string | null>(null);
 
 const onLogin = async (username: string, password: string) => {
     loginError.value = null; 
 
-    const result = await signIn({ username, password })
-        .catch(error => {
-            loginError.value = errorMessage(error, LoginErrorMap)
-        });
-    
-    // TODO handle redirect if successful
+    await signIn(
+        { username, password },
+        { callbackUrl: '/' }
+    ).catch(error => {
+        loginError.value = errorMessage(error, LoginErrorMap)
+    });
 };
+
+watchImmediate(status, () => {
+    if (status.value === 'authenticated') {
+        navigateTo('/');
+    }
+});
 </script>
 
 <style scoped>

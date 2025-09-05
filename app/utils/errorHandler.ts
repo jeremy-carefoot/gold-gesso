@@ -17,3 +17,22 @@ export const errorMessage = (
     }
     return DefaultErrorMessage;
 };
+
+export const getFieldErrors = (errorData: unknown): Record<string, string> => {
+    if (
+        errorData
+        && typeof errorData === 'object' 
+        && !Array.isArray(errorData)
+    ) {
+        return Object.entries(errorData).reduce((acc, [key, value]) => {
+            if (Array.isArray(value)) {
+                acc[key] = value.join(', ');
+            } else if (typeof value === 'string') {
+                acc[key] = value;
+            }
+            return acc;
+        }, {} as Record<string, string>);
+    }
+  
+    return {};
+  };

@@ -4,7 +4,14 @@
             :src="GoldGessoLogo"
             class="logo"
         />
-        <NuxtLink to="/login">
+        <AccountDropdown
+            v-if="status === 'authenticated'"
+            @sign-out="onSignOut"
+        />
+        <NuxtLink
+            v-else
+            to="/login"
+        >
             <UButton
                 label="Login"
                 class="h-fit"
@@ -15,6 +22,14 @@
 
 <script setup lang="ts">
 import GoldGessoLogo from '@/assets/images/gold_gesso_logo.png?url';
+import AccountDropdown from '~/components/AccountDropdown/AccountDropdown.vue';
+
+const { status, signOut } = useAuth();
+
+const onSignOut = async () => {
+    await signOut({ callbackUrl: '/login' })
+        .catch(error => {});
+}
 </script>
 
 <style scoped>

@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import GoldGessoLogo from '@/assets/images/gold_gesso_logo.png?url';
-import AccountDropdown from '~/components/AccountDropdown/AccountDropdown.vue';
+import GoldGessoLogo from '@/assets/images/gold_gesso_logo.png';
+import AccountDropdown from '@/components/AccountDropdown/AccountDropdown.vue';
 
 const { status, signOut } = useAuth();
 

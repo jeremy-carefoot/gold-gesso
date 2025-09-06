@@ -21,6 +21,18 @@
                     {{ row.original.name }}
                 </NuxtLink>
             </template>
+            <template #course_id-cell="{ row }">
+                <div class="max-w-[250px] truncate">
+                    {{ getCourseName(row.original.course_id) ?? row.original.course_id }}
+                </div>
+            </template>
+            <template #course_id-header="{ column }">
+                <SortingButton
+                    :label="column.columnDef.header?.toString()"
+                    :sort-direction="column.getIsSorted()"
+                    @click="column.toggleSorting()"
+                />
+            </template>
             <template #expand-cell="{ row }">
                 <UButton
                     v-if="row.original.description"
@@ -97,15 +109,18 @@ import type { TableColumn } from '@nuxt/ui';
 import { useElementSize } from '@vueuse/core';
 import { GradingTypeMeta } from '~/utils/meta';
 import { joinURL } from 'ufo';
+import type { CourseMeta } from '~/types/course';
+import { keyBy } from 'lodash';
 
 const EXPANDED_ROW_PADDING = 64;
 
 interface Props {
     assignments: AssignmentMeta[];
+    courses?: CourseMeta[];
     loading?: boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const config = useRuntimeConfig();
 
@@ -128,6 +143,9 @@ const getGradingTypeStyle = (gradingType: GradingType) => ({
     backgroundColor: GradingTypeMeta[gradingType]?.color ?? 'black'
 });
 
+const courseMeta = computed(() => keyBy(props.courses, 'id'));
+const getCourseName = (id: number) => courseMeta.value[id]?.name;
+
 const columns: TableColumn<AssignmentMeta>[] = [
     {
         id: 'expand',
@@ -136,6 +154,10 @@ const columns: TableColumn<AssignmentMeta>[] = [
     {
         accessorKey: 'name',
         header: 'Name'
+    },
+    {
+        accessorKey: 'course_id',
+        header: 'Course'
     },
     {
         accessorKey: 'due_at',
@@ -155,10 +177,6 @@ const columns: TableColumn<AssignmentMeta>[] = [
         accessorKey: 'allowed_attempts',
         header: 'Allowed Attempts'
     },
-    {
-        accessorKey: 'course_id',
-        header: 'Course ID'
-    }
 ];
 </script>
 

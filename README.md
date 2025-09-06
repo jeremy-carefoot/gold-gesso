@@ -1,11 +1,17 @@
-# University of Alberta Planner
+# Gold Gesso
 
-This application interacts with the UofA Planner API to track assignments and provide a more personalized school planner experience.
+This application interacts with the Gold Gesso/Canvas API to track assignments and provide a more personalized school planner experience.
 
 The application uses Nuxt, Vue, and Typescript.
 Check the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) for more information on the technologies used.
 
 ## Setup
+
+Set the correct environment variables:
+```bash
+# See .env.default and set in the following file:
+touch .env
+```
 
 Use the correct NPM version and install dependencies:
 

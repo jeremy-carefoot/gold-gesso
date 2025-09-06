@@ -16,6 +16,4 @@ const {
     data: assignments,
     pending
 } = useAPI<AssignmentMeta[]>('/api/data/all-assignments');
-
-watch(assignments, val => console.log(val));
 </script>

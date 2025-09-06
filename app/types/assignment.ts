@@ -1,3 +1,5 @@
+export type GradingType = 'pass_fail' | 'points' | 'letter_grade' | 'percent' | 'gpa_scale' | 'not_graded';
+
 export interface AssignmentMeta {
     id: number;
     name: string;
@@ -10,7 +12,7 @@ export interface AssignmentMeta {
     allowed_attempts: number;
     has_submitted_submissions: boolean;
     course_id: number;
-    grading_type: string;
+    grading_type: GradingType;
     course_ref: number;
     user_ref: number;
 };

@@ -33,7 +33,7 @@ const AuthConfig = {
       session: {
         dataType: {
           id: 'number',
-          username: 'jeremycarefoot',
+          username: 'string',
           email: 'string',
           first_name: 'string',
           last_name: 'string'

@@ -41,7 +41,6 @@
 
             <template #expanded="{ row }">
                 <div
-                    class="overflow"
                     v-dompurify-html="row.original.description"
                 />
             </template>

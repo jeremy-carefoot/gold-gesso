@@ -11,7 +11,10 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth'
   ],
   runtimeConfig: {
-    apiBase: ''
+    apiBase: '',
+    public: {
+      canvasBase: ''
+    }
   },
   ui: {
     colorMode: false // disables dark mode

@@ -1,4 +1,4 @@
-import { joinURL } from 'ufo'
+import { joinURL } from 'ufo';
 
 export default defineEventHandler(async (event) => {
   // Proxy to external api

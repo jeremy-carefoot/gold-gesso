@@ -110,7 +110,7 @@ import { useElementSize } from '@vueuse/core';
 import { GradingTypeMeta } from '~/utils/meta';
 import { joinURL } from 'ufo';
 import type { CourseMeta } from '~/types/course';
-import { keyBy } from 'lodash';
+import _ from 'lodash';
 
 const EXPANDED_ROW_PADDING = 64;
 
@@ -143,7 +143,7 @@ const getGradingTypeStyle = (gradingType: GradingType) => ({
     backgroundColor: GradingTypeMeta[gradingType]?.color ?? 'black'
 });
 
-const courseMeta = computed(() => keyBy(props.courses, 'id'));
+const courseMeta = computed(() => _.keyBy(props.courses, 'id'));
 const getCourseName = (id: number) => courseMeta.value[id]?.name;
 
 const columns: TableColumn<AssignmentMeta>[] = [

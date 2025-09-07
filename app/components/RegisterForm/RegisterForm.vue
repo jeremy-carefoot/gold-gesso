@@ -135,8 +135,8 @@
 
 <script setup lang="ts">
 import type { UserRegisterInfo } from './types';
-import { isEmpty } from 'lodash';
 import { watchDeep } from '@vueuse/core';
+import _ from 'lodash';
 
 const props = defineProps<{
     error?: string | null;
@@ -155,7 +155,7 @@ const formState = ref<UserRegisterInfo>({
 const formErrors = ref<{ name: string; message: string }[]>([]);
 
 const submitDisabled = computed(() => (
-    !!formErrors.value.length || !isEmpty(props.submitErrors)
+    !!formErrors.value.length || !_.isEmpty(props.submitErrors)
 ));
 
 const emit = defineEmits<{

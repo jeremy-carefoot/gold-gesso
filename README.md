@@ -33,18 +33,12 @@ npm run dev
 
 ## Production
 
-Build the application for production:
+Currently configured to deploy to Render.com
+
+Application will automatically reploy when main branch is updated.
 
 ```bash
-# npm
-npm run build
+# Push git main branch
+git checkout main
+git push
 ```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

@@ -51,7 +51,7 @@ const saving = ref(false);
 const toast = useToast();
 
 const { data: tokenData }= useAPI<{ has_canvas_token: boolean }>(
-    '/api/auth/canvas-token'
+    '/api/auth/canvas-token/'
 );
 
 const onSubmit = async () => {
@@ -60,7 +60,7 @@ const onSubmit = async () => {
 
     saving.value = true;
 
-    await $api('/api/auth/canvas-token', {
+    await $api('/api/auth/canvas-token/', {
         method: 'POST',
         body: {
             canvas_auth_token: token

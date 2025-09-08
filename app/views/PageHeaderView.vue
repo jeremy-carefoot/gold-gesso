@@ -1,12 +1,15 @@
 <template>
     <div class="page-header-container">
-        <img
-            :src="GoldGessoLogo"
-            class="logo"
-        />
+        <NuxtLink to="/">
+            <img
+                :src="GoldGessoLogo"
+                class="logo"
+            />
+        </NuxtLink>
         <ClientOnly>
             <AccountDropdown
                 v-if="status === 'authenticated'"
+                @account="toAccount"
                 @sign-out="onSignOut"
             />
             <NuxtLink
@@ -31,6 +34,10 @@ const { status, signOut } = useAuth();
 const onSignOut = async () => {
     await signOut({ callbackUrl: '/login' })
         .catch(error => {});
+}
+
+const toAccount = () => {
+    navigateTo('/account');
 }
 </script>
 

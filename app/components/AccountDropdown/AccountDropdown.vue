@@ -40,6 +40,7 @@ import type { DropdownMenuItem } from '@nuxt/ui';
 const { data } = useAuth(); 
 
 const emit = defineEmits<{
+    (e: 'account'): void;
     (e: 'signOut'): void;
 }>();
 
@@ -50,13 +51,22 @@ const items = computed<DropdownMenuItem[]>(() => [
         icon: null,
         disabled: true
     }],
-    [{
-        label: 'Sign out',
-        icon: 'i-heroicons-arrow-left-on-rectangle',
-        onSelect() {
-            emit('signOut')
+    [
+        {
+            label: 'Account',
+            icon: 'i-material-symbols-settings',
+            onSelect() {
+                emit('account')
+            },
         },
-    }]
+        {
+            label: 'Sign out',
+            icon: 'i-heroicons-arrow-left-on-rectangle',
+            onSelect() {
+                emit('signOut')
+            },
+        }
+    ],
 ]);
 </script>
 

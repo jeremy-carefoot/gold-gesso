@@ -50,7 +50,7 @@ const formState = ref({
 const saving = ref(false);
 const toast = useToast();
 
-const { data: tokenData }= useAPI<{ has_canvas_token: boolean }>(
+const { data: tokenData }= useAPI<{ canvas_token: string }>(
     '/api/auth/canvas-token/'
 );
 
@@ -84,9 +84,8 @@ const onSubmit = async () => {
 };
 
 watch(tokenData, data => {
-    if (data?.has_canvas_token) {
-        // Set filler content to indicate there is a token set
-        formState.value.canvasToken = 'a'.repeat(30);
+    if (data?.canvas_token) {
+        formState.value.canvasToken = data.canvas_token;
     }
 });
 </script>

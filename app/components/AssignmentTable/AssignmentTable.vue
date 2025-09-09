@@ -7,7 +7,6 @@
             :data="assignments"
             :columns="columns"
             :loading="loading"
-            :ui="{ root: 'overflow-x-hidden' }"
             empty="No assignments found."
             class="w-full"
         >

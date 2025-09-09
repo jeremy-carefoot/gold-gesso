@@ -5,5 +5,5 @@ export const utilPx = (px: number): string => {
 };
 
 export const formatDateTime = (isoDate: string): string => {
-    return DateTime.fromISO(isoDate).toFormat('MMMM d, h:mm a');
+    return DateTime.fromISO(isoDate).toFormat('LLL d, h:mm a');
 };

@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-bold mb-6">Assignments</h1>
         
         <AssignmentTable 
-            :assignments="assignments || []"
+            :assignments="activeAssignments"
             :courses="courses || []"
             :loading="pending"
         />
@@ -18,6 +18,10 @@ const {
     data: assignments,
     pending
 } = useAPI<AssignmentMeta[]>('/api/data/all-assignments');
+
+const activeAssignments = computed(() => assignments.value?.filter(
+    a => !a.has_submitted_submissions
+) || []);
 
 const {
     data: courses

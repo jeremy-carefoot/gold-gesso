@@ -16,9 +16,17 @@
                     target="blank"
                     rel="noreferrer"
                     class="link"
+                    :class="{
+                        'completed': row.original.has_submitted_submissions
+                    }"
                 >
                     {{ row.original.name }}
                 </NuxtLink>
+                <UIcon
+                    v-if="row.original.has_submitted_submissions"
+                    name="material-symbols:check"
+                    class="text-primary-500 ml-2"
+                />
             </template>
             <template #course_id-cell="{ row }">
                 <div class="max-w-[250px] truncate">
@@ -184,5 +192,9 @@ const columns: TableColumn<AssignmentMeta>[] = [
 
 .link {
     @apply text-primary-900 underline;
+
+    &.completed {
+        @apply line-through;
+    }
 }
 </style>

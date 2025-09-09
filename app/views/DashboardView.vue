@@ -19,11 +19,13 @@ const {
     pending
 } = useAPI<AssignmentMeta[]>('/api/data/all-assignments');
 
+
+// all-assignments automatically syncs course data so we can call cached courses from db here
+const {
+    data: courses
+} = useAPI<CourseMeta[]>('/api/data/cached-courses');
+
 const activeAssignments = computed(() => assignments.value?.filter(
     a => !a.has_submitted_submissions
 ) || []);
-
-const {
-    data: courses
-} = useAPI<CourseMeta[]>('/api/data/courses')
 </script>

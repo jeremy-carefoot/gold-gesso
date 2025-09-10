@@ -1,5 +1,9 @@
 const AuthConfig = {
     disableServerSideAuth: false,
+    sessionRefresh: {
+      enablePeriodically: true,
+      enableOnWindowFocus: false
+    },
     provider: {
       type: 'local',
       pages: {

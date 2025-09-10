@@ -136,7 +136,7 @@ const { width } = useElementSize(tableContainerRef);
 
 const getAssignmentUrl = (assignment: AssignmentMeta) => {
     const canvasUrl = config.public.canvasBase;
-    return joinURL(canvasUrl, `/courses/${assignment.course_id}/assignments/${assignment.id}`);
+    return joinURL(canvasUrl, `/courses/${assignment.course_id}/assignments/${assignment.assignment_id}`);
 };
 
 const getExpandIcon = (isExpanded: boolean) => (

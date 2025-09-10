@@ -2,6 +2,7 @@ export type GradingType = 'pass_fail' | 'points' | 'letter_grade' | 'percent' | 
 
 export interface AssignmentMeta {
     id: number;
+    assignment_id: number;
     name: string;
     description: string;
     due_at: string | null;

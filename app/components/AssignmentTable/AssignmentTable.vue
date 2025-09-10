@@ -110,7 +110,7 @@
                 No assignments found.
             </template>
             <template #loading>
-                Loading...
+                Fetching assignments...
             </template>
         </UTable>
     </div>

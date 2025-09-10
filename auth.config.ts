@@ -1,7 +1,7 @@
 const AuthConfig = {
     disableServerSideAuth: false,
     sessionRefresh: {
-      enablePeriodically: true,
+      enablePeriodically: false,
       enableOnWindowFocus: false
     },
     provider: {

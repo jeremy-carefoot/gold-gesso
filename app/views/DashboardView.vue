@@ -32,6 +32,7 @@ const {
     data: assignments,
     pending
 } = useSyncAPI<AssignmentMeta[]>('/api/data/all-assignments', {
+    server: false,
     // courses get updated on assignment sync
     onUpdate: () => refreshCourses()
 });

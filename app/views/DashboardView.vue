@@ -26,7 +26,7 @@ const showSubmitted = ref(false);
 const {
     data: assignments,
     pending
-} = useAPI<AssignmentMeta[]>('/api/data/all-assignments');
+} = useSyncAPI<AssignmentMeta[]>('/api/data/all-assignments');
 
 
 // all-assignments automatically syncs course data so we can call cached courses from db here

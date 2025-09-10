@@ -24,15 +24,17 @@ import type { CourseMeta } from '~/types/course';
 const showSubmitted = ref(false);
 
 const {
+    data: courses,
+    refresh: refreshCourses
+} = useAPI<CourseMeta[]>('/api/data/cached-courses');
+
+const {
     data: assignments,
     pending
-} = useSyncAPI<AssignmentMeta[]>('/api/data/all-assignments');
-
-
-// all-assignments automatically syncs course data so we can call cached courses from db here
-const {
-    data: courses
-} = useAPI<CourseMeta[]>('/api/data/cached-courses');
+} = useSyncAPI<AssignmentMeta[]>('/api/data/all-assignments', {
+    // courses get updated on assignment sync
+    onUpdate: () => refreshCourses()
+});
 
 const filteredAssignments = computed(() => {
     if (showSubmitted.value) {

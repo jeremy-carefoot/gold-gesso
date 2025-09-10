@@ -7,7 +7,6 @@
             :data="assignments"
             :columns="columns"
             :loading="loading"
-            empty="No assignments found."
             class="w-full"
         >
             <template #name-cell="{ row }">
@@ -105,6 +104,13 @@
                 ">
                     <div v-dompurify-html="row.original.description" />
                 </div>
+            </template>
+
+            <template #empty>
+                No assignments found.
+            </template>
+            <template #loading>
+                Loading...
             </template>
         </UTable>
     </div>

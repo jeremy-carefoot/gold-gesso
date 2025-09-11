@@ -9,17 +9,20 @@
             />
         </div>
         
-        <AssignmentTable 
-            :assignments="filteredAssignments || []"
-            :courses="courses || []"
-            :loading="pending"
-        />
+        <ClientOnly>
+            <AssignmentTable 
+                :assignments="filteredAssignments || []"
+                :courses="courses || []"
+                :loading="pending"
+            />
+        </ClientOnly>
     </div>
 </template>
 
 <script setup lang="ts">
 import type { AssignmentMeta } from '@/types/assignment';
 import type { CourseMeta } from '~/types/course';
+import { watchImmediate } from '@vueuse/core';
 
 const showSubmitted = ref(false);
 

@@ -6,22 +6,20 @@
                 class="logo"
             />
         </NuxtLink>
-        <ClientOnly>
-            <AccountDropdown
-                v-if="status === 'authenticated'"
-                @account="toAccount"
-                @sign-out="onSignOut"
+        <AccountDropdown
+            v-if="status === 'authenticated'"
+            @account="toAccount"
+            @sign-out="onSignOut"
+        />
+        <NuxtLink
+            v-else-if="status === 'unauthenticated'"
+            to="/login"
+        >
+            <UButton
+                label="Login"
+                class="h-fit"
             />
-            <NuxtLink
-                v-else-if="status === 'unauthenticated'"
-                to="/login"
-            >
-                <UButton
-                    label="Login"
-                    class="h-fit"
-                />
-            </NuxtLink>
-        </ClientOnly>
+        </NuxtLink>
     </div>
 </template>
 

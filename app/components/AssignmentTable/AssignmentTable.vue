@@ -10,22 +10,24 @@
             class="w-full"
         >
             <template #name-cell="{ row }">
-                <NuxtLink
-                    :to="getAssignmentUrl(row.original)"
-                    target="blank"
-                    rel="noreferrer"
-                    class="link"
-                    :class="{
-                        'completed': row.original.has_submitted_submissions
-                    }"
-                >
-                    {{ row.original.name }}
-                </NuxtLink>
-                <UIcon
-                    v-if="row.original.has_submitted_submissions"
-                    name="material-symbols:check"
-                    class="text-primary-500 ml-2"
-                />
+                <div class="name-cell">
+                    <NuxtLink
+                        :to="getAssignmentUrl(row.original)"
+                        target="blank"
+                        rel="noreferrer"
+                        class="link"
+                        :class="{
+                            'completed': row.original.has_submitted_submissions
+                        }"
+                    >
+                        {{ row.original.name }}
+                    </NuxtLink>
+                    <UIcon
+                        v-if="row.original.has_submitted_submissions"
+                        name="material-symbols:check"
+                        class="text-primary-500"
+                    />
+                </div>
             </template>
             <template #course_id-cell="{ row }">
                 <div class="max-w-[250px] truncate">
@@ -120,7 +122,7 @@
 import type { AssignmentMeta, GradingType } from '@/types/assignment';
 import type { TableColumn } from '@nuxt/ui';
 import { useElementSize } from '@vueuse/core';
-import { GradingTypeMeta } from '~/utils/meta';
+import { GradingTypeMeta } from '~/constants/meta';
 import { joinURL } from 'ufo';
 import type { CourseMeta } from '~/types/course';
 import _ from 'lodash';
@@ -134,7 +136,6 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-
 const config = useRuntimeConfig();
 
 const tableContainerRef = useTemplateRef('tableContainerRef');
@@ -196,11 +197,14 @@ const columns: TableColumn<AssignmentMeta>[] = [
 <style scoped>
 @reference "@/assets/css/main.css";
 
-.link {
-    @apply text-primary-900 underline;
+.name-cell {
+    @apply flex gap-2 max-w-[300px];
+    .link {
+        @apply text-primary-900 underline truncate;
 
-    &.completed {
-        @apply line-through;
+        &.completed {
+            @apply line-through;
+        }
     }
 }
 </style>

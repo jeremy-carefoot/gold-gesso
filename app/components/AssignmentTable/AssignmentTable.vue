@@ -7,8 +7,15 @@
             :data="assignments"
             :columns="columns"
             :loading="loading"
+            :sorting="initialSort"
             class="w-full"
         >
+            <template #select-cell="{ row }">
+                <UCheckbox
+                    :model-value="selected.includes(row.original)"
+                    @change="onSelect(row)"
+                />
+            </template>
             <template #name-cell="{ row }">
                 <div class="name-cell">
                     <NuxtLink
@@ -17,13 +24,13 @@
                         rel="noreferrer"
                         class="link"
                         :class="{
-                            'completed': row.original.has_submitted_submissions
+                            'completed': row.original.is_submitted
                         }"
                     >
                         {{ row.original.name }}
                     </NuxtLink>
                     <UIcon
-                        v-if="row.original.has_submitted_submissions"
+                        v-if="row.original.is_submitted"
                         name="material-symbols:check"
                         class="text-primary-500"
                     />
@@ -102,8 +109,8 @@
                     class="overflow-x-auto"
                     :style="{
                         maxWidth: utilPx(width - EXPANDED_ROW_PADDING)
-                    }
-                ">
+                    }"
+                >
                     <div v-dompurify-html="row.original.description" />
                 </div>
             </template>
@@ -120,7 +127,7 @@
 
 <script setup lang="ts">
 import type { AssignmentMeta, GradingType } from '@/types/assignment';
-import type { TableColumn } from '@nuxt/ui';
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import { useElementSize } from '@vueuse/core';
 import { GradingTypeMeta } from '~/constants/meta';
 import { joinURL } from 'ufo';
@@ -140,6 +147,17 @@ const config = useRuntimeConfig();
 
 const tableContainerRef = useTemplateRef('tableContainerRef');
 const { width } = useElementSize(tableContainerRef);
+
+const selected = defineModel<AssignmentMeta[]>('selected', { default: [] });
+
+const onSelect = (row: TableRow<AssignmentMeta>) => {
+    const isSelected = selected.value.includes(row.original);
+    if (isSelected) {
+        selected.value = selected.value.filter(d => d !== row.original);
+        return;
+    }
+    selected.value.push(row.original);
+};
 
 const getAssignmentUrl = (assignment: AssignmentMeta) => {
     const canvasUrl = config.public.canvasBase;
@@ -161,6 +179,10 @@ const courseMeta = computed(() => _.keyBy(props.courses, 'id'));
 const getCourseName = (id: number) => courseMeta.value[id]?.name;
 
 const columns: TableColumn<AssignmentMeta>[] = [
+    {
+        id: 'select',
+        header: ''
+    },
     {
         id: 'expand',
         header: ''
@@ -192,6 +214,11 @@ const columns: TableColumn<AssignmentMeta>[] = [
         header: 'Allowed Attempts'
     },
 ];
+
+const initialSort = [{
+    id: 'due_at',
+    desc: false
+}];
 </script>
 
 <style scoped>

@@ -11,7 +11,8 @@ export interface AssignmentMeta {
     points_possible: number;
     grade_group_students_individually: boolean;
     allowed_attempts: number;
-    has_submitted_submissions: boolean;
+    is_submitted: boolean;
+    is_custom: boolean;
     course_id: number;
     grading_type: GradingType;
     course_ref: number;

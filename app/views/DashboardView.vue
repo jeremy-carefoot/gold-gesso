@@ -91,7 +91,7 @@ const markAsSubmitted = async () => {
     }
 
     toast.add({
-        title: 'Markd as Submitted',
+        title: 'Marked as Submitted',
         description: 'Marked checked assignments as submitted',
         color: 'primary'
     });

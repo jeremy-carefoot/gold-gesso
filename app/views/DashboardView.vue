@@ -11,11 +11,16 @@
                     />
                     <UButton
                         v-if="selected.length"
+                        label="Mark as Submitted"
                         class="h-fit"
                         @click="markAsSubmitted"
-                    >
-                        Mark as Submitted
-                    </UButton>
+                    />
+                    <UButton
+                        v-if="selected.length"
+                        label="Mark as Unsubmitted"
+                        class="h-fit"
+                        @click="markAsSubmitted"
+                    />
                 </div>
             </div>
             <UButton

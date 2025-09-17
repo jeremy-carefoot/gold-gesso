@@ -10,7 +10,15 @@ export default defineAppConfig({
       slots: { base: 'cursor-pointer' }
     },
     select: {
-      slots: { base: 'cursor-pointer' }
+      slots: {
+        base: 'cursor-pointer',
+        item: 'cursor-pointer'
+      }
+    },
+    calendar: {
+      slots: {
+        cell: 'cursor-pointer'
+      }
     }
   }
 });

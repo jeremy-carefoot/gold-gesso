@@ -13,7 +13,6 @@ export interface AssignmentMeta {
     allowed_attempts: number;
     is_submitted: boolean;
     is_custom: boolean;
-    course_id: number;
     grading_type: GradingType;
     course_ref: number;
     user_ref: number;

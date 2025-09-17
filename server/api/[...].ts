@@ -6,4 +6,4 @@ export default defineEventHandler(async (event) => {
   const target = joinURL(apiUrl, event.path);
 
   return proxyRequest(event, target);
-})
+});

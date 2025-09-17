@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto p-6">
-        <div class="flex gap-4">
-            <div class="flex flex-col gap-4 mb-6">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col gap-4">
                 <h1 class="text-2xl font-bold">Assignments</h1>
                 <div class="flex gap-6 items-center h-8">
                     <UCheckbox
@@ -11,13 +11,24 @@
                     />
                     <UButton
                         v-if="selected.length"
+                        label="Mark as Submitted"
                         class="h-fit"
                         @click="markAsSubmitted"
-                    >
-                        Mark as Submitted
-                    </UButton>
+                    />
+                    <UButton
+                        v-if="selected.length"
+                        label="Mark as Unsubmitted"
+                        class="h-fit"
+                        @click="markAsSubmitted"
+                    />
                 </div>
             </div>
+            <UButton
+                v-if="courses"
+                trailing-icon="material-symbols:add"
+                label="Add"
+                @click="openNewAssignmentModal"
+            />
         </div>
 
         <ClientOnly>
@@ -32,11 +43,13 @@
 </template>
 
 <script setup lang="ts">
+import CreateAssignmentModal from '~/views/modals/CreateAssignmentModal/CreateAssignmentModal.vue';
 import type { AssignmentMeta } from '@/types/assignment';
 import type { CourseMeta } from '~/types/course';
 
 const { $api } = useNuxtApp();
 const toast = useToast();
+const overlay = useOverlay();
 
 const showSubmitted = ref(false);
 const selected = ref<AssignmentMeta[]>([]);
@@ -98,5 +111,20 @@ const markAsSubmitted = async () => {
 
     selected.value = [];
     await refreshData();
+};
+
+const NewAssignmentModal = overlay.create(CreateAssignmentModal);
+const openNewAssignmentModal = async () => {
+    if (!courses.value) return;
+
+    const modal = NewAssignmentModal.open({
+        courses: courses.value?.map(c => ({ id: c.id, label: c.name }))
+    });
+
+    const isSuccess = await modal.result;
+    
+    if (isSuccess) {
+        await refreshData();
+    }
 };
 </script>

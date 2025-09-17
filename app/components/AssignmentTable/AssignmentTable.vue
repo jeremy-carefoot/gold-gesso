@@ -22,8 +22,8 @@
                         :to="getAssignmentUrl(row.original)"
                         target="blank"
                         rel="noreferrer"
-                        class="link"
                         :class="{
+                            'link': !row.original.is_custom,
                             'completed': row.original.is_submitted
                         }"
                     >
@@ -36,9 +36,9 @@
                     />
                 </div>
             </template>
-            <template #course_id-cell="{ row }">
+            <template #course_ref-cell="{ row }">
                 <div class="max-w-[250px] truncate">
-                    {{ getCourseName(row.original.course_id) ?? row.original.course_id }}
+                    {{ getCourseName(row.original.course_ref) ?? row.original.course_ref }}
                 </div>
             </template>
             <template #course_id-header="{ column }">
@@ -89,9 +89,13 @@
             </template>
             <template #grading_type-cell="{ row }">
                 <UBadge
+                    v-if="row.original.grading_type"
                     :label="getGradingTypeLabel(row.original.grading_type)"
                     :style="getGradingTypeStyle(row.original.grading_type)"
                 />
+                <span v-else>
+                    -
+                </span>
             </template>
             <template #allowed_attempts-cell="{ row }">
                 <span v-if="row.original.allowed_attempts === -1">
@@ -160,8 +164,10 @@ const onSelect = (row: TableRow<AssignmentMeta>) => {
 };
 
 const getAssignmentUrl = (assignment: AssignmentMeta) => {
+    if (assignment.is_custom) return undefined;
+
     const canvasUrl = config.public.canvasBase;
-    return joinURL(canvasUrl, `/courses/${assignment.course_id}/assignments/${assignment.assignment_id}`);
+    return joinURL(canvasUrl, `/courses/${assignment.course_ref}/assignments/${assignment.assignment_id}`);
 };
 
 const getExpandIcon = (isExpanded: boolean) => (
@@ -192,7 +198,7 @@ const columns: TableColumn<AssignmentMeta>[] = [
         header: 'Name'
     },
     {
-        accessorKey: 'course_id',
+        accessorKey: 'course_ref',
         header: 'Course'
     },
     {
@@ -225,9 +231,10 @@ const initialSort = [{
 @reference "@/assets/css/main.css";
 
 .name-cell {
-    @apply flex gap-2 max-w-[300px];
+    @apply flex gap-2 max-w-[300px] text-primary-900 truncate;
+
     .link {
-        @apply text-primary-900 underline truncate;
+        @apply underline;
 
         &.completed {
             @apply line-through;

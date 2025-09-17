@@ -3,23 +3,48 @@
         <div class="flex justify-between items-center mb-6">
             <div class="flex flex-col gap-4">
                 <h1 class="text-2xl font-bold">Assignments</h1>
-                <div class="flex gap-6 items-center h-8">
-                    <UCheckbox
-                        v-model="showSubmitted"
-                        class="ml-4"
-                        label="Show Submitted"
-                    />
+                <UCheckbox
+                    v-model="showSubmitted"
+                    class="ml-4"
+                    label="Show Submitted"
+                />
+                <div
+                    v-if="selected.length"
+                    class="flex gap-2 items-center h-8 ml-4"
+                >
                     <UButton
-                        v-if="selected.length"
+                        variant="ghost"
+                        class="rounded-full"
+                        color="neutral"
+                        size="xs"
+                        icon="material-symbols:close"
+                        @click="clearSelection"
+                    />
+                    <span class="text-sm text-gray-500">
+                        Selected {{ selected.length }} item(s):
+                    </span>
+                    <UButton
+                        :disabled="loadingFetch"
                         label="Mark as Submitted"
                         class="h-fit"
-                        @click="markAsSubmitted"
+                        variant="solid"
+                        @click="markSubmission(true)"
                     />
                     <UButton
-                        v-if="selected.length"
+                        :disabled="loadingFetch"
                         label="Mark as Unsubmitted"
                         class="h-fit"
-                        @click="markAsSubmitted"
+                        color="neutral"
+                        variant="subtle"
+                        @click="markSubmission(false)"
+                    />
+                    <UButton
+                        :disabled="loadingFetch"
+                        label="Delete"
+                        class="h-fit"
+                        variant="subtle"
+                        color="error"
+                        @click="deleteAssignments"
                     />
                 </div>
             </div>
@@ -54,6 +79,8 @@ const overlay = useOverlay();
 const showSubmitted = ref(false);
 const selected = ref<AssignmentMeta[]>([]);
 
+const loadingFetch = ref(false);
+
 const {
     data: courses,
     refresh: refreshCourses
@@ -82,11 +109,18 @@ const refreshData = async () => Promise.all([
     refreshCourses()
 ]);
 
-const markAsSubmitted = async () => {
+const clearSelection = () => {
+    selected.value = [];
+};
+
+const markSubmission = async (value: boolean) => {
+    loadingFetch.value = true;
+
     const reqBody = selected.value.map(a => ({
         assignment_id: a.assignment_id,
-        is_submitted: true
+        is_submitted: value
     }));
+    const valueLabel = value ? 'submitted' : 'unsubmitted';
 
     try {
         await $api('/api/data/update-assignment/', {
@@ -95,8 +129,9 @@ const markAsSubmitted = async () => {
         });
     } catch (error) {
         const message = errorMessage(error);
+        loadingFetch.value = false;
         toast.add({
-            title: 'Failed to mark assignments as submitted',
+            title: `Failed to mark assignments as ${valueLabel}`,
             description: message,
             color: 'error'
         });
@@ -104,12 +139,45 @@ const markAsSubmitted = async () => {
     }
 
     toast.add({
-        title: 'Marked as Submitted',
-        description: 'Marked checked assignments as submitted',
+        title: `Marked as ${valueLabel}`,
+        description: `Marked checked assignments as ${valueLabel}`,
         color: 'primary'
     });
 
-    selected.value = [];
+    loadingFetch.value = false;
+    clearSelection();
+    await refreshData();
+};
+
+const deleteAssignments = async () => {
+    loadingFetch.value = true;
+
+    try {
+        await $api('/api/data/delete-assignments/', {
+            method: 'DELETE',
+            query: {
+                ids: selected.value.map(a => a.assignment_id).join(',')
+            }
+        });
+    } catch (error) {
+        const message = errorMessage(error);
+        loadingFetch.value = false;
+        toast.add({
+            title: 'Failed to delete assignments',
+            description: message,
+            color: 'error'
+        });
+        return;
+    }
+
+    toast.add({
+        title: `Deleted assignments`,
+        description: `Deleted checked assignments`,
+        color: 'primary'
+    });
+
+    loadingFetch.value = false;
+    clearSelection();
     await refreshData();
 };
 

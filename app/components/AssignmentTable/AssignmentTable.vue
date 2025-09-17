@@ -4,7 +4,7 @@
         class="w-full"
     >
         <UTable
-            :data="assignments"
+            :data="tableData"
             :columns="columns"
             :loading="loading"
             :sorting="initialSort"
@@ -37,7 +37,7 @@
                 </div>
             </template>
             <template #course_ref-cell="{ row }">
-                <div class="max-w-[250px] truncate">
+                <div class="max-w-[200px] truncate">
                     {{ getCourseName(row.original.course_ref) ?? row.original.course_ref }}
                 </div>
             </template>
@@ -92,19 +92,24 @@
                     v-if="row.original.grading_type"
                     :label="getGradingTypeLabel(row.original.grading_type)"
                     :style="getGradingTypeStyle(row.original.grading_type)"
+                    class="rounded-full"
                 />
                 <span v-else>
                     -
                 </span>
             </template>
-            <template #allowed_attempts-cell="{ row }">
-                <span v-if="row.original.allowed_attempts === -1">
-                    <UIcon
-                        name="mdi:infinity"
-                    />
-                </span>
+            <template #days_till_due-cell="{ row }">
+                <UBadge
+                    v-if="row.original.days_till_due"
+                    :label="row.original.urgency_meta?.label
+                        ?? `${row.original.days_till_due} Days`"
+                    :style="{
+                        backgroundColor: row.original.urgency_meta?.color
+                    }"
+                    :icon="row.original.urgency_meta?.icon"
+                />
                 <span v-else>
-                    {{ row.original.allowed_attempts }}
+                    -
                 </span>
             </template>
 
@@ -133,26 +138,42 @@
 import type { AssignmentMeta, GradingType } from '@/types/assignment';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import { useElementSize } from '@vueuse/core';
-import { GradingTypeMeta } from '~/constants/meta';
+import { GradingTypeMeta, DueDateUrgencyMeta, getDueDateUrgency } from '~/constants/meta';
 import { joinURL } from 'ufo';
-import type { CourseMeta } from '~/types/course';
+import { DateTime } from 'luxon';
 import _ from 'lodash';
+import type { AssignmentTableProps, AssignmentTableRow } from './types';
 
 const EXPANDED_ROW_PADDING = 64;
 
-interface Props {
-    assignments: AssignmentMeta[];
-    courses?: CourseMeta[];
-    loading?: boolean;
-}
-
-const props = defineProps<Props>();
+const props = defineProps<AssignmentTableProps>();
 const config = useRuntimeConfig();
 
 const tableContainerRef = useTemplateRef('tableContainerRef');
 const { width } = useElementSize(tableContainerRef);
 
 const selected = defineModel<AssignmentMeta[]>('selected', { default: [] });
+
+const getDaysUntilDue = (date: string) => {
+    const now = DateTime.now().startOf('day');
+    const dueAt = DateTime.fromISO(date).startOf('day');
+    return Math.ceil(dueAt.diff(now, 'days').days);
+};
+
+const getDueDateUrgencyMeta = (daysUntilDue: number) => {
+    const urgencyLevel = getDueDateUrgency(daysUntilDue);
+    return DueDateUrgencyMeta[urgencyLevel];
+};
+
+const tableData = computed<AssignmentTableRow[]>(() => props.assignments.map(a => {
+    if (!a.due_at) return a;
+    const days_till_due = getDaysUntilDue(a.due_at);
+    return {
+        ...a,
+        days_till_due,
+        urgency_meta: getDueDateUrgencyMeta(days_till_due)
+    }
+}));
 
 const onSelect = (row: TableRow<AssignmentMeta>) => {
     const isSelected = selected.value.includes(row.original);
@@ -177,14 +198,18 @@ const getExpandIcon = (isExpanded: boolean) => (
 );
 
 const getGradingTypeLabel = (gradingType: GradingType) => GradingTypeMeta[gradingType]?.label ?? 'Unknown';
-const getGradingTypeStyle = (gradingType: GradingType) => ({
-    backgroundColor: GradingTypeMeta[gradingType]?.color ?? 'black'
-});
+const getGradingTypeStyle = (gradingType: GradingType) => {
+    const meta = GradingTypeMeta[gradingType];
+    return {
+        backgroundColor: meta?.color ?? 'black',
+        color: meta?.textColor ?? 'white'
+    };
+};
 
 const courseMeta = computed(() => _.keyBy(props.courses, 'id'));
 const getCourseName = (id: number) => courseMeta.value[id]?.name;
 
-const columns: TableColumn<AssignmentMeta>[] = [
+const columns: TableColumn<AssignmentTableRow>[] = [
     {
         id: 'select',
         header: ''
@@ -202,22 +227,22 @@ const columns: TableColumn<AssignmentMeta>[] = [
         header: 'Course'
     },
     {
-        accessorKey: 'due_at',
-        header: 'Due On',
-        sortingFn: luxonSortByDate<AssignmentMeta>
-    },
-    {
-        accessorKey: 'unlock_at',
-        header: 'Unlocks On',
-        sortingFn: luxonSortByDate<AssignmentMeta>
-    },
-    {
         accessorKey: 'grading_type',
         header: 'Grading Type'
     },
     {
-        accessorKey: 'allowed_attempts',
-        header: 'Allowed Attempts'
+        accessorKey: 'unlock_at',
+        header: 'Unlocks On',
+        sortingFn: luxonSortByDate<AssignmentTableRow>
+    },
+    {
+        accessorKey: 'due_at',
+        header: 'Due On',
+        sortingFn: luxonSortByDate<AssignmentTableRow>
+    },
+    {
+        accessorKey: 'days_till_due',
+        header: 'Due In'
     },
 ];
 

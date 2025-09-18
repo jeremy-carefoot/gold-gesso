@@ -81,6 +81,10 @@ const selected = ref<AssignmentMeta[]>([]);
 
 const loadingFetch = ref(false);
 
+const clearSelection = () => {
+    selected.value = [];
+};
+
 const {
     data: courses,
     refresh: refreshCourses
@@ -92,7 +96,10 @@ const {
     refresh: refreshAssignments
 } = useSyncAPI<AssignmentMeta[]>('/api/data/all-assignments', {
     // courses get updated on assignment sync
-    onUpdate: () => refreshCourses()
+    onUpdate: () => {
+        clearSelection(); // when table resyncs, selection may move so clear it
+        refreshCourses();
+    }
 });
 
 const filteredAssignments = computed(() => {
@@ -108,10 +115,6 @@ const refreshData = async () => Promise.all([
     refreshAssignments(),
     refreshCourses()
 ]);
-
-const clearSelection = () => {
-    selected.value = [];
-};
 
 const markSubmission = async (value: boolean) => {
     loadingFetch.value = true;

@@ -100,7 +100,7 @@
             </template>
             <template #days_till_due-cell="{ row }">
                 <UBadge
-                    v-if="row.original.days_till_due"
+                    v-if="!_.isNil(row.original.days_till_due)"
                     :label="row.original.urgency_meta?.label
                         ?? `${row.original.days_till_due} Days`"
                     :style="{
@@ -157,6 +157,7 @@ const selected = defineModel<AssignmentMeta[]>('selected', { default: [] });
 const getDaysUntilDue = (date: string) => {
     const now = DateTime.now().startOf('day');
     const dueAt = DateTime.fromISO(date).startOf('day');
+    console.log(dueAt.diff(now, 'days').days);
     return Math.ceil(dueAt.diff(now, 'days').days);
 };
 

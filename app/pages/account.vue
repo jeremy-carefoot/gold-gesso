@@ -11,8 +11,8 @@ import { watchImmediate } from '@vueuse/core';
 const { status } = useAuth();
 
 watchImmediate(status, () => {
-    if (status.value !== 'authenticated') {
-        navigateTo('/');
+    if (status.value === 'unauthenticated') {
+        navigateTo('/login');
     }
 });
 </script>

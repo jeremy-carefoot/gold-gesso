@@ -1,46 +1,42 @@
 <template>
-    <div class="content-section">
-        <h1 class="section-title">API Tokens</h1>
-        <p class="section-description">Manage your external service integrations</p>
+    <div class="setting-section">
+        <h2 class="subsection-title">Canvas API Token</h2>
+        <p class="subsection-description">
+            Connect your Canvas account to sync assignments and course data
+        </p>
         
-        <div class="token-section">
-            <h2 class="subsection-title">Canvas API Token</h2>
-            <p class="subsection-description">
-                Connect your Canvas account to sync assignments and course data
-            </p>
-            
-            <UForm
-                class="token-form"
-                :state="formState"
-                @submit="onSubmit"
+        <UForm
+            class="token-form"
+            :state="formState"
+            @submit="onSubmit"
+        >
+            <UFormField
+                label="Canvas API Token"
+                name="canvasToken"
             >
-                <UFormField
-                    label="Canvas API Token"
-                    name="canvasToken"
+                <UInput
+                    v-model="formState.canvasToken"
+                    type="password"
+                    placeholder="Enter your Canvas API token"
+                    class="w-[300px]"
+                />
+            </UFormField>
+            
+            <div class="form-actions">
+                <UButton 
+                    type="submit"
+                    :loading="saving"
+                    :disabled="!formState.canvasToken"
                 >
-                    <UInput
-                        v-model="formState.canvasToken"
-                        type="password"
-                        placeholder="Enter your Canvas API token"
-                        class="w-[300px]"
-                    />
-                </UFormField>
-                
-                <div class="form-actions">
-                    <UButton 
-                        type="submit"
-                        :loading="saving"
-                        :disabled="!formState.canvasToken"
-                    >
-                        Save Token
-                    </UButton>
-                </div>
-            </UForm>
-        </div>
+                    Save Token
+                </UButton>
+            </div>
+        </UForm>
     </div>
 </template>
 
 <script setup lang="ts">
+import { watchImmediate } from '@vueuse/core';
 const { $api } = useNuxtApp();
 
 const formState = ref({
@@ -83,7 +79,7 @@ const onSubmit = async () => {
     saving.value = false;
 };
 
-watch(tokenData, data => {
+watchImmediate(tokenData, data => {
     if (data?.canvas_token) {
         formState.value.canvasToken = data.canvas_token;
     }
@@ -92,30 +88,6 @@ watch(tokenData, data => {
 
 <style scoped>
 @reference "@/assets/css/main.css";
-
-.content-section {
-    @apply max-w-4xl;
-}
-
-.section-title {
-    @apply text-3xl font-bold text-gray-900 mb-2;
-}
-
-.section-description {
-    @apply text-gray-600 mb-8;
-}
-
-.token-section {
-    @apply bg-white rounded-lg border border-gray-200 p-6;
-}
-
-.subsection-title {
-    @apply text-lg font-semibold text-gray-900 mb-2;
-}
-
-.subsection-description {
-    @apply text-sm text-gray-600 mb-6;
-}
 
 .token-form {
     @apply space-y-4;

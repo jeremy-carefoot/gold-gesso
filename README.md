@@ -33,7 +33,7 @@ npm run dev
 
 ## Production
 
-Currently configured to deploy to Render.com
+Currently configured to deploy to Vercel
 
 Application will automatically reploy when main branch is updated.
 
